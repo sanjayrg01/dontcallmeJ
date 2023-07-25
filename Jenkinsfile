@@ -33,7 +33,7 @@ pipeline {
         stage('Docker Login') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
+                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhublogin') {
                         // Ensure the DockerHub credentials ID matches 'dockerhub-credentials' in the withRegistry block above
                         // 'dockerhub-credentials' is the ID of the Jenkins credential holding DockerHub username and password
                         // Use 'docker.withRegistry' for DockerHub
