@@ -33,15 +33,20 @@ pipeline {
         stage('Docker Login') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhublogin') {
-                        // Ensure the DockerHub credentials ID matches 'dockerhub-credentials' in the withRegistry block above
-                        // 'dockerhub-credentials' is the ID of the Jenkins credential holding DockerHub username and password
-                        // Use 'docker.withRegistry' for DockerHub
-                        docker.login(usernameVar: 'DOCKERHUB_USERNAME', passwordVar: 'DOCKERHUB_PASSWORD')
+                    withCredentials([usernamePassword(credentialsId: 'dockerhublogin', passwordVariable: 'DOCKERHUB_PASSWORD', usernameVariable: 'DOCKERHUB_USERNAME')]) {
+                        def registryURL = 'https://index.docker.io/v1/'
+                        def dockerCredentials = 'dockerhublogin'
+
+                        // Set up the Docker login command with --password-stdin
+                        def loginCmd = "docker login -u ${DOCKERHUB_USERNAME} --password-stdin ${registryURL}"
+
+                        // Run the Docker login command securely using sh and echo
+                        sh "echo ${DOCKERHUB_PASSWORD} | ${loginCmd}"
                     }
                 }
             }
         }
+
 
         stage('Push Docker Image') {
             steps {
