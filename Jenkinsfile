@@ -19,34 +19,11 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Login') {
             steps {
-                script {
-                    def versionNumber = "${env.DOCKER_IMAGE_NAME}-${env.BUILD_NUMBER}"
-                    def dockerTag = "${env.DOCKER_REGISTRY}/${versionNumber}"
-
-                    def dockerImage = docker.build(dockerTag, '.')
-                }
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
             }
         }
-
-        stage('Docker Login') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhublogin', passwordVariable: 'DOCKERHUB_PASSWORD', usernameVariable: 'DOCKERHUB_USERNAME')]) {
-                        def registryURL = 'https://index.docker.io/v1/'
-                        def dockerCredentials = 'dockerhublogin'
-
-                        // Set up the Docker login command with --password-stdin
-                        def loginCmd = "docker login -u ${DOCKERHUB_USERNAME} --password-stdin ${registryURL}"
-
-                        // Run the Docker login command securely using sh and echo
-                        sh "echo ${DOCKERHUB_PASSWORD} | ${loginCmd}"
-                    }
-                }
-            }
-        }
-
 
         stage('Push Docker Image') {
             steps {
