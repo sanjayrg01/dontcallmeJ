@@ -1,5 +1,4 @@
 pipeline {
-<<<<<<< HEAD
   agent {
     kubernetes {
       yaml '''
@@ -22,9 +21,6 @@ pipeline {
         '''
     }
   }
-=======
-    agent any
->>>>>>> 7906d6d (second commmit and created a CI CD)
 
     environment {
         // Customize these environment variables according to your project
@@ -45,14 +41,6 @@ pipeline {
         }
 
         stage('Build Docker Image') {
-<<<<<<< HEAD
-            agent {
-                docker {
-                    label 'docker'
-                }
-            }
-=======
->>>>>>> 7906d6d (second commmit and created a CI CD)
             steps {
                 script {
                     def versionNumber = "${env.DOCKER_IMAGE_NAME}-${env.BUILD_NUMBER}"
@@ -100,8 +88,4 @@ pipeline {
             }
         }
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 7906d6d (second commmit and created a CI CD)
