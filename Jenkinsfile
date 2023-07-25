@@ -28,7 +28,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry("${env.DOCKER_REGISTRY}", "docker-registry-credentials") {
+                    docker.withRegistry("${env.DOCKER_REGISTRY}", "dockerhuglogin") {
                         dockerImage.push()
                     }
                 }
